@@ -30,8 +30,37 @@ class GoogleMapLocationPickerPlugin : FlutterPlugin, MethodCallHandler, Activity
         }
         if (call.method == "getSigningCertSha1") {
             try {
+                val info: PackageInfo
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    info = activityBinding!!.activity.packageManager.getPackageInfo(call.arguments<String>()!!, PackageManager.GET_SIGNING_CERTIFICATES)//26/01/204 added !! as error  inferred type is String?
+                    for (signature in info.signingInfo.apkContentsSigners) {
+                        val md: MessageDigest = MessageDigest.getInstance("SHA1")
+                        md.update(signature.toByteArray())
 
-                val info: PackageInfo = activityBinding!!.activity.packageManager.getPackageInfo(call.arguments<String>(), PackageManager.GET_SIGNATURES)
+                        val bytes: ByteArray = md.digest()
+                        val bigInteger = BigInteger(1, bytes)
+                        val hex: String = String.format("%0" + (bytes.size shl 1) + "x", bigInteger)
+
+                        result.success(hex)
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
+                    info = activityBinding!!.activity.packageManager.getPackageInfo(call.arguments<String>()!!, PackageManager.GET_SIGNATURES)//26/01/204 added !! as error  inferred type is String?
+                    @Suppress("DEPRECATION")
+                    for (signature in info.signatures) {
+                        val md: MessageDigest = MessageDigest.getInstance("SHA1")
+                        md.update(signature.toByteArray())
+
+                        val bytes: ByteArray = md.digest()
+                        val bigInteger = BigInteger(1, bytes)
+                        val hex: String = String.format("%0" + (bytes.size shl 1) + "x", bigInteger)
+
+                        result.success(hex)
+                    }
+                }
+
+
+        /*        val info: PackageInfo = activityBinding!!.activity.packageManager.getPackageInfo(call.arguments<String>(), PackageManager.GET_SIGNATURES)
 
                 for (signature in info.signatures) {
                     val md: MessageDigest = MessageDigest.getInstance("SHA1")
@@ -42,7 +71,7 @@ class GoogleMapLocationPickerPlugin : FlutterPlugin, MethodCallHandler, Activity
                     val hex: String = String.format("%0" + (bytes.size shl 1) + "x", bigInteger)
 
                     result.success(hex)
-                }
+                }*/
             } catch (e: Exception) {
                 result.error("ERROR", e.toString(), null)
             }

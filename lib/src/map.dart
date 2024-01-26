@@ -10,7 +10,7 @@ import 'package:google_map_location_picker/src/utils/log.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../generated/app_localizations.dart';
 import 'model/location_result.dart';
 import 'utils/location_utils.dart';
 

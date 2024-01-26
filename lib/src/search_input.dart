@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../generated/app_localizations.dart';
 
 /// Custom Search input field, showing the search and clear icons.
 class SearchInput extends StatefulWidget {

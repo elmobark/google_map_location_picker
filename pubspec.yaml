@@ -47,6 +47,8 @@ flutter:
       android:
         package: com.humazed.google_map_location_picker
         pluginClass: GoogleMapLocationPickerPlugin
+      ios:
+        pluginClass: GoogleMapLocationPickerPlugin  # added by me on 26/01/2024 as it works for ios
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:

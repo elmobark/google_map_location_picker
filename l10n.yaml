@@ -1,6 +1,7 @@
 arb-dir: lib/l10n
 use-escaping: true
 template-arb-file: intl_en.arb
+output-dir: lib/generated
 output-localization-file: app_localizations.dart
 synthetic-package: false #Generates the localization files as a no synthetic package.
 

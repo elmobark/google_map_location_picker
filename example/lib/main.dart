@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_map_location_picker/l10n/app_localizations.dart' as package; // localization of your package.
 
+import 'package:google_map_location_picker/generated/app_localizations.dart' as package; // localization of your package.
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
