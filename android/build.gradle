@@ -35,14 +35,18 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    // Configure only for each module that uses Java 8
+    // language features (either in its source code or
+    // through dependencies).
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    // For Kotlin projects
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
-    kotlinOptions {
-        jvmTarget="17"
-    }
 
     defaultConfig {
         minSdkVersion 24
