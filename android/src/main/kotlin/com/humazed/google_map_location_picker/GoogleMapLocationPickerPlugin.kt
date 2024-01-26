@@ -30,7 +30,9 @@ class GoogleMapLocationPickerPlugin : FlutterPlugin, MethodCallHandler, Activity
         }
         if (call.method == "getSigningCertSha1") {
             try {
+
                 val info: PackageInfo = activityBinding!!.activity.packageManager.getPackageInfo(call.arguments<String>(), PackageManager.GET_SIGNATURES)
+
                 for (signature in info.signatures) {
                     val md: MessageDigest = MessageDigest.getInstance("SHA1")
                     md.update(signature.toByteArray())
@@ -54,16 +56,24 @@ class GoogleMapLocationPickerPlugin : FlutterPlugin, MethodCallHandler, Activity
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        // TODO: your plugin is now attached to an Activity
         activityBinding = binding
     }
 
     override fun onDetachedFromActivity() {
+        // TODO: your plugin is no longer associated with an Activity.
+        // Clean up references.
         activityBinding = null
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
+        // TODO: the Activity your plugin was attached to was
+        // destroyed to change configuration.
+        // This call will be followed by onReattachedToActivityForConfigChanges().
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        // TODO: your plugin is now attached to a new Activity
+        // after a configuration change.
     }
 }

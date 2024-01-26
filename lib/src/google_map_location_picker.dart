@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_map_location_picker/generated/l10n.dart';
 import 'package:google_map_location_picker/src/map.dart';
 import 'package:google_map_location_picker/src/providers/location_provider.dart';
 import 'package:google_map_location_picker/src/rich_suggestion.dart';
@@ -13,7 +12,7 @@ import 'package:google_map_location_picker/src/utils/uuid.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'model/auto_comp_iete_item.dart';
 import 'model/location_result.dart';
 import 'model/nearby_place.dart';
@@ -134,7 +133,7 @@ class LocationPickerState extends State<LocationPicker> {
                 SizedBox(width: 24),
                 Expanded(
                   child: Text(
-                    S.of(context).finding_place,
+                    AppLocalizations.of(context)!.finding_place,
                     style: TextStyle(fontSize: 16),
                   ),
                 )
@@ -183,7 +182,7 @@ class LocationPickerState extends State<LocationPicker> {
 
       if (predictions.isEmpty) {
         AutoCompleteItem aci = AutoCompleteItem();
-        aci.text = S.of(context).no_result_found;
+        aci.text = AppLocalizations.of(context)!.no_result_found;
         aci.offset = 0;
         aci.length = 0;
 

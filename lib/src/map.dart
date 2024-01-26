@@ -4,14 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_map_location_picker/generated/l10n.dart';
 import 'package:google_map_location_picker/src/providers/location_provider.dart';
 import 'package:google_map_location_picker/src/utils/loading_builder.dart';
 import 'package:google_map_location_picker/src/utils/log.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'model/location_result.dart';
 import 'utils/location_utils.dart';
 
@@ -239,7 +238,7 @@ class MapPickerState extends State<MapPicker> {
                         _address = data["address"];
                         _placeId = data["placeId"];
                         return Text(
-                          _address ?? S.of(context).unnamedPlace,
+                          _address ?? AppLocalizations.of(context)!.unnamedPlace,
                           style: TextStyle(fontSize: 18),
                         );
                       },
@@ -353,11 +352,11 @@ class MapPickerState extends State<MapPicker> {
             return true;
           },
           child: AlertDialog(
-            title: Text(S.of(context).access_to_location_denied),
-            content: Text(S.of(context).allow_access_to_the_location_services),
+            title: Text(AppLocalizations.of(context)!.access_to_location_denied),
+            content: Text(AppLocalizations.of(context)!.allow_access_to_the_location_services),
             actions: <Widget>[
               TextButton(
-                child: Text(S.of(context).ok),
+                child: Text(AppLocalizations.of(context)!.ok),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
                   _initCurrentLocation();
@@ -383,13 +382,12 @@ class MapPickerState extends State<MapPicker> {
             return true;
           },
           child: AlertDialog(
-            title: Text(S.of(context).access_to_location_permanently_denied),
-            content: Text(S
-                .of(context)
+            title: Text(AppLocalizations.of(context)!.access_to_location_permanently_denied),
+            content: Text(AppLocalizations.of(context)!
                 .allow_access_to_the_location_services_from_settings),
             actions: <Widget>[
               TextButton(
-                child: Text(S.of(context).ok),
+                child: Text(AppLocalizations.of(context)!.ok),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
                   Geolocator.openAppSettings();
