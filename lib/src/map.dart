@@ -76,8 +76,14 @@ class MapPickerState extends State<MapPicker> {
   Position? _currentPosition;
 
   String? _address;
-
   String? _placeId;
+  String? _streetNumber;
+  String? _route;
+  String? _locality;
+  String? _administrativeAreaLevel2;
+  String? _administrativeAreaLevel1;
+  String? _country;
+  String? _postalCode;
 
   void _onToggleMapTypePressed() {
     final MapType nextType =
@@ -237,6 +243,15 @@ class MapPickerState extends State<MapPicker> {
                         }
                         _address = data["address"];
                         _placeId = data["placeId"];
+                        _streetNumber = data["streetNumber"];
+                        _route = data["route"];
+                        _locality = data["locality"];
+                        _administrativeAreaLevel2 =
+                        data["administrativeAreaLevel2"];
+                        _administrativeAreaLevel1 =
+                        data["administrativeAreaLevel1"];
+                        _country = data["country"];
+                        _postalCode = data["postalCode"];
                         return Text(
                           _address ?? AppLocalizations.of(context)!.unnamedPlace,
                           style: TextStyle(fontSize: 18),
@@ -252,6 +267,13 @@ class MapPickerState extends State<MapPicker> {
                           latLng: locationProvider.lastIdleLocation,
                           address: _address,
                           placeId: _placeId,
+                          streetNumber: _streetNumber,
+                          route: _route,
+                          locality: _locality,
+                          administrativeAreaLevel2: _administrativeAreaLevel2,
+                          administrativeAreaLevel1: _administrativeAreaLevel1,
+                          country: _country,
+                          postalCode: _postalCode,
                         )
                       });
                     },
@@ -277,9 +299,43 @@ class MapPickerState extends State<MapPicker> {
               headers: await LocationUtils.getAppHeaders()))
           .body);
 
+      List<dynamic> addressComponents =
+      response['results'][0]['address_components'];
+      String? streetNumber;
+      String? route;
+      String? locality;
+      String? administrativeAreaLevel2;
+      String? administrativeAreaLevel1;
+      String? country;
+      String? postalCode;
+      if (addressComponents != null) {
+        streetNumber = addressComponents.firstWhere(
+                (entry) => entry['types'].contains('street_number'))['long_name'];
+        route = addressComponents.firstWhere(
+                (entry) => entry['types'].contains('route'))['long_name'];
+        locality = addressComponents.firstWhere(
+                (entry) => entry['types'].contains('locality'))['long_name'];
+        administrativeAreaLevel2 = addressComponents.firstWhere((entry) =>
+            entry['types']
+                .contains('administrative_area_level_2'))['long_name'];
+        administrativeAreaLevel1 = addressComponents.firstWhere((entry) =>
+            entry['types']
+                .contains('administrative_area_level_1'))['long_name'];
+        country = addressComponents.firstWhere(
+                (entry) => entry['types'].contains('country'))['long_name'];
+        postalCode = addressComponents.firstWhere(
+                (entry) => entry['types'].contains('postal_code'))['long_name'];
+      }
       return {
         "placeId": response['results'][0]['place_id'],
-        "address": response['results'][0]['formatted_address']
+        "address": response['results'][0]['formatted_address'],
+        "streetNumber": streetNumber ?? '',
+        "route": route ?? '',
+        "locality": locality ?? '',
+        "administrativeAreaLevel2": administrativeAreaLevel2 ?? '',
+        "administrativeAreaLevel1": administrativeAreaLevel1 ?? '',
+        "country": country ?? '',
+        "postalCode": postalCode ?? '',
       };
     } catch (e) {
       print(e);
