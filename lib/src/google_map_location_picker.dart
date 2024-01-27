@@ -348,7 +348,7 @@ class LocationPickerState extends State<LocationPicker> {
 
       setState(() {
         locationResult = LocationResult();
-        locationResult!.address = road;
+        locationResult!.formattedAddress = road;
         locationResult!.latLng = latLng;
         locationResult!.placeId = placeId;
       });
