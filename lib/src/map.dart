@@ -84,6 +84,7 @@ class MapPickerState extends State<MapPicker> {
   String? _administrativeAreaLevel1;
   String? _country;
   String? _postalCode;
+  Timer? timer;
 
   void _onToggleMapTypePressed() {
     final MapType nextType =
@@ -187,8 +188,12 @@ class MapPickerState extends State<MapPicker> {
             },
             onCameraIdle: () async {
               print("onCameraIdle#_lastMapPosition = $_lastMapPosition");
-              LocationProvider.of(context, listen: false)
-                  .setLastIdleLocation(_lastMapPosition);
+              timer = Timer(Duration(milliseconds: 500), () {
+                //condition check to avoid calling server too often
+                LocationProvider.of(context, listen: false)
+                    .setLastIdleLocation(_lastMapPosition);
+                setState(() {});
+              });
             },
             onCameraMoveStarted: () {
               print("onCameraMoveStarted#_lastMapPosition = $_lastMapPosition");
@@ -247,13 +252,14 @@ class MapPickerState extends State<MapPicker> {
                         _route = data["route"];
                         _locality = data["locality"];
                         _administrativeAreaLevel2 =
-                        data["administrativeAreaLevel2"];
+                            data["administrativeAreaLevel2"];
                         _administrativeAreaLevel1 =
-                        data["administrativeAreaLevel1"];
+                            data["administrativeAreaLevel1"];
                         _country = data["country"];
                         _postalCode = data["postalCode"];
                         return Text(
-                          _address ?? AppLocalizations.of(context)!.unnamedPlace,
+                          _address ??
+                              AppLocalizations.of(context)!.unnamedPlace,
                           style: TextStyle(fontSize: 18),
                         );
                       },
@@ -300,7 +306,7 @@ class MapPickerState extends State<MapPicker> {
           .body);
 
       List<dynamic> addressComponents =
-      response['results'][0]['address_components'];
+          response['results'][0]['address_components'];
       String? streetNumber;
       String? route;
       String? locality;
@@ -310,11 +316,11 @@ class MapPickerState extends State<MapPicker> {
       String? postalCode;
       if (addressComponents != null) {
         streetNumber = addressComponents.firstWhere(
-                (entry) => entry['types'].contains('street_number'))['long_name'];
+            (entry) => entry['types'].contains('street_number'))['long_name'];
         route = addressComponents.firstWhere(
-                (entry) => entry['types'].contains('route'))['long_name'];
+            (entry) => entry['types'].contains('route'))['long_name'];
         locality = addressComponents.firstWhere(
-                (entry) => entry['types'].contains('locality'))['long_name'];
+            (entry) => entry['types'].contains('locality'))['long_name'];
         administrativeAreaLevel2 = addressComponents.firstWhere((entry) =>
             entry['types']
                 .contains('administrative_area_level_2'))['long_name'];
@@ -322,9 +328,9 @@ class MapPickerState extends State<MapPicker> {
             entry['types']
                 .contains('administrative_area_level_1'))['long_name'];
         country = addressComponents.firstWhere(
-                (entry) => entry['types'].contains('country'))['long_name'];
+            (entry) => entry['types'].contains('country'))['long_name'];
         postalCode = addressComponents.firstWhere(
-                (entry) => entry['types'].contains('postal_code'))['long_name'];
+            (entry) => entry['types'].contains('postal_code'))['long_name'];
       }
       return {
         "placeId": response['results'][0]['place_id'],
@@ -408,8 +414,10 @@ class MapPickerState extends State<MapPicker> {
             return true;
           },
           child: AlertDialog(
-            title: Text(AppLocalizations.of(context)!.access_to_location_denied),
-            content: Text(AppLocalizations.of(context)!.allow_access_to_the_location_services),
+            title:
+                Text(AppLocalizations.of(context)!.access_to_location_denied),
+            content: Text(AppLocalizations.of(context)!
+                .allow_access_to_the_location_services),
             actions: <Widget>[
               TextButton(
                 child: Text(AppLocalizations.of(context)!.ok),
@@ -438,7 +446,8 @@ class MapPickerState extends State<MapPicker> {
             return true;
           },
           child: AlertDialog(
-            title: Text(AppLocalizations.of(context)!.access_to_location_permanently_denied),
+            title: Text(AppLocalizations.of(context)!
+                .access_to_location_permanently_denied),
             content: Text(AppLocalizations.of(context)!
                 .allow_access_to_the_location_services_from_settings),
             actions: <Widget>[
